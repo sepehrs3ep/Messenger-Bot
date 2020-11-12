@@ -31,17 +31,25 @@ console.log = function (d) {
   logStdout.write(util.format(d) + '\n');
 };
 
-
 bot.on('message', (msg) => { 	
   let date = new Date(msg.date * 1000);
 	 let timestamp = date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + "@" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
 	let msgFromInfo = "";
 	if(msg.chat.type == "private"){
+
 		msgFromInfo = msg.from.first_name + "(" + msg.from.id + ")";
 	}else if(msg.chat.type == "group"){
 		msgFromInfo = msg.from.first_name + "(" + msg.from.id + "/" + msg.chat.title + ")";
-	}
+  }
+
+  if(msg.text === '/test'){
+    var i;
+    for( i = 0 ; i < 50 ; i++){
+      send(msg,i);
+    }
+  }
+  
 	
 	 console.log("[INFO](" + timestamp + ") Msg from " + msgFromInfo + ": " + msg.text);
   
@@ -64,6 +72,9 @@ bot.onText(/\/audio/, function onAudioText(msg) {
   const audio = request(url);
   bot.sendAudio(msg.chat.id, audio);
 });
+
+// Matches /love
+
 
 
 // Matches /love
@@ -128,3 +139,10 @@ bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 
   bot.editMessageText(text, opts);
 });
+
+async function send(msg,i) {
+   let promise = new Promise((resolve, reject) => {
+    setTimeout(() =>  bot.sendMessage(msg.chat.id," hello masoud & sepehr !  " + i), 1000)
+  });
+  let res =  await promise;
+}
